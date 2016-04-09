@@ -1,13 +1,24 @@
-name := "reactive_stock_copy"
+name := """reactive-stocks"""
 
-version := "1.0"
+version := "1.0-SNAPSHOT"
 
-lazy val `reactive_stock_copy` = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.7"
 
-libraryDependencies ++= Seq( jdbc , cache , ws   , specs2 % Test )
+// scalaz-bintray resolver needed for specs2 library
+resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 
-unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )  
+libraryDependencies ++= Seq(
+  ws, // Play's web services module
+  specs2 % Test,
+  "org.specs2" %% "specs2-matcher-extra" % "3.6" % Test,
+  "org.easytesting" % "fest-assert" % "1.4" % Test,
+  "com.typesafe.akka" %% "akka-testkit" % "2.3.11" % Test,
+  "org.webjars" % "bootstrap" % "2.3.2",
+  "org.webjars" % "flot" % "0.8.0"
+)
 
-resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"  
+routesGenerator := InjectedRoutesGenerator
+
+fork in run := true
